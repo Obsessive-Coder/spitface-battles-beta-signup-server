@@ -30,6 +30,7 @@ const addUser = async (req, res, next) => {
     }
 
     // Insert new user
+    console.log('HERE: ', username, email, normalizedEmail);
     const [result] = await db.query('INSERT INTO users (username, email) VALUES (?, ?)', [username, normalizedEmail]);
 
     res.status(201).json({
