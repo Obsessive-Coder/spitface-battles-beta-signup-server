@@ -1,5 +1,5 @@
 const db = require('../db/connection');
-const { normalizeEmail } = require('../utils/emailUtils');
+const { normalizeEmail, validateUsername, validateEmail } = require('../utils/emailUtils');
 
 // Fetch all users
 const getUsers = async (req, res, next) => {
@@ -17,6 +17,12 @@ const addUser = async (req, res, next) => {
     const { username, email } = req.body;
     const normalizedEmail = normalizeEmail(email);
 
+    const { isValid: isUsernameValid = false, message: usernameMessage = '' } = validateUsername(username);
+    const { isValid: isEmailValid = false, message: emailMessage = '' } = validateEmail(normalizedEmail);
+
+    console.log('Username: ', isUsernameValid, usernameMessage);
+    console.log('Email: ',  isEmailValid, emailMessage);
+
     // Check for existing username or email
     const [existingUser] = await db.query(
       'SELECT * FROM users WHERE username = ? OR email = ?',
@@ -30,7 +36,6 @@ const addUser = async (req, res, next) => {
     }
 
     // Insert new user
-    console.log('HERE: ', username, email, normalizedEmail);
     const [result] = await db.query('INSERT INTO users (username, email) VALUES (?, ?)', [username, normalizedEmail]);
 
     res.status(201).json({
