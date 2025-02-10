@@ -1,5 +1,7 @@
-const db = require('../db/connection');
+// const db = require('../db/connection');
 const { normalizeEmail, validateUsername, validateEmail } = require('../utils/emailUtils');
+
+const db = {query: () => null}
 
 // Fetch all users
 const getUsers = async (req, res, next) => {
