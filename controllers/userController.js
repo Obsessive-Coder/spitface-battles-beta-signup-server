@@ -6,6 +6,7 @@ const db = {query: () => null}
 // Fetch all users
 const getUsers = async (req, res, next) => {
   try {
+    return res.json({data: 'working!'})
     const [rows] = await db.query('SELECT id, username, email FROM users');
     res.json(rows);
   } catch (error) {
